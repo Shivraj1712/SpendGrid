@@ -1,0 +1,44 @@
+# --- Air (Live Reload) ---
+# Air creates a tmp directory for the build binary
+tmp/
+
+# --- Binaries and Build Outputs ---
+bin/
+out/
+dist/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+main
+server
+
+# --- Go Specific ---
+vendor/
+*.out
+*.test
+
+# --- Environment Secrets (CRITICAL) ---
+.env
+.env.local
+.env.*.local
+
+# --- Database & System ---
+*.db
+*.sqlite
+.DS_Store
+Thumbs.db
+
+# --- IDEs and Editors ---
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# --- Frontend (Next.js / Node) ---
+node_modules/
+.next/
+build/
+.vercel
+*.log

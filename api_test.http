@@ -1,0 +1,61 @@
+### 1. Checking the Signup feature
+POST http://127.0.0.1:8000/api/v0/auth/signup
+Content-Type: application/json
+
+{
+    "user_name": "YourYourYour",
+    "email": "name@spendgrid.com",
+    "password": "YourSecurePassword123"
+}
+
+###
+
+### 2. Check Your Profile feature
+GET http://127.0.0.1:8000/api/v0/auth/profile
+Accept: application/json
+
+### 3. Checking logout feature
+POST http://127.0.0.1:8000/api/v0/auth/logout
+Accept: application/json
+
+### 4. Checking login feature
+POST http://127.0.0.1:8000/api/v0/auth/login
+Content-Type:  application/json
+
+{
+    "email": "name@spendgrid.com",
+    "password": "YourSecurePassword123"
+}
+
+### 5. Checking the create expense feature
+POST http://127.0.0.1:8000/api/v0/expense
+Content-Type: application/json
+
+{
+    "title" : "Fees",
+    "amount" : 12500,
+    "category" : "essentials"
+}
+
+### 6. Getting all expenses 
+GET http://127.0.0.1:8000/api/v0/expense/c4ba7d7c-bc86-4115-bad1-c8a3ad824b9c
+Accept: application/json
+
+
+
+### 6. Checking the update expense feature
+PUT  http://127.0.0.1:8000/api/v0/expense/c4ba7d7c-bc86-4115-bad1-c8a3ad824b9c
+Content-Type: application/json
+
+{
+    "title" : "Payment for",
+    "amount" : 12500,
+    "category" : "essentials"
+}
+
+### 7. Checking the delete expense feature
+DELETE  http://127.0.0.1:8000/api/v0/expense/c4ba7d7c-bc86-4115-bad1-c8a3ad824b9c
+Accept: application/json
+
+
+### 8. Checking for search and filter feature
