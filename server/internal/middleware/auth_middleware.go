@@ -9,6 +9,9 @@ import (
 
 func Authenticate(ctx *fiber.Ctx) error {
 	tokenString := ctx.Cookies("jwt")
+	if tokenString == "" {
+		return response.Response(ctx, "Not authorized", nil, false, fiber.StatusUnauthorized)
+	}
 	UserID, err := utils.ParseToken(tokenString)
 	if err != nil {
 		logger.Error("Not authorized", err)

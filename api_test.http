@@ -59,3 +59,5 @@ Accept: application/json
 
 
 ### 8. Checking for search and filter feature
+GET http://127.0.0.1:8000/api/v0/expense?search=fees&category=essentials
+Accept: application/json

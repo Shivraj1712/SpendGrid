@@ -12,7 +12,6 @@ import (
 	"github.com/google/uuid"
 )
 
-
 var validate = goValidate.New()
 
 type AuthHandler struct{}
@@ -41,6 +40,7 @@ func (r *AuthHandler) SignUp(ctx *fiber.Ctx) error {
 		HTTPOnly: true,
 		Secure:   false,
 		Expires:  time.Now().Add(time.Hour * 72),
+		Path:     "/",
 	}
 	ctx.Cookie(&cookie)
 	return response.Response(ctx, "User Sign Up Successful", nil, true, fiber.StatusCreated)
@@ -66,13 +66,19 @@ func (r *AuthHandler) Login(ctx *fiber.Ctx) error {
 		Value:    token,
 		HTTPOnly: true,
 		Secure:   false,
+		Path:     "/",
 	}
 	ctx.Cookie(cookie)
 	return response.Response(ctx, "User Login Successful", nil, true, fiber.StatusOK)
 }
 
 func (r *AuthHandler) Logout(ctx *fiber.Ctx) error {
-	ctx.ClearCookie("jwt")
+	ctx.Cookie(&fiber.Cookie{
+		Name:    "jwt",
+		Value:   "",
+		Expires: time.Now().Add(-time.Hour),
+		Path:    "/",
+	})
 	return response.Response(ctx, "User Logout Successful", nil, true, fiber.StatusOK)
 }
 
