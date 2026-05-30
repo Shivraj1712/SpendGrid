@@ -1,4 +1,4 @@
-# SpendGrid 🪙
+# SpendGrid
 
 SpendGrid is a high-performance full-stack expense tracker application built using a clean, decoupled architecture. The ecosystem features a secure Go (Golang) REST API powered by the Fiber web framework and GORM connected to a Neon PostgreSQL database, alongside a global-state Next.js App Router frontend deployed to Vercel.
 
@@ -43,36 +43,28 @@ To ensure absolute cross-domain synchronization between the Next.js frontend (ho
 
 The complete SpendGrid repository maps out into two isolated root-level application spaces:
 
+```text
 SpendGrid/
-├── client/ # Next.js Frontend Application
-│ ├── public/ # Static production assets
-│ └── src/
-│ ├── app/ # App Router pages and layouts
-│ ├── components/ # UI elements and layout modules
-│ └── context/ # React AuthContext global state managers
-├── server/ # Go (Golang) Backend API
-│ ├── cmd/
-│ │ └── api/
-│ │ └── main.go # Core server entry point & CORS definitions
-│ ├── internal/
-│ │ ├── config/ # Infrastructure validation models
-│ │ ├── database/ # GORM connection pools
-│ │ ├── handler/ # HTTP request parsers & structural response contexts
-│ │ ├── middleware/ # Custom global error interceptors & JWT validators
-│ │ ├── router/ # Modular route groups (User, Expense)
-│ │ └── service/ # Pure isolated business and mutation logic
-│ └── pkg/
-│ ├── logger/ # Structured console monitors
-│ ├── response/ # Universal JSON marshalling shapes
-│ └── validator/ # Payload verification structs
-└── README.md # Unified workspace blueprint
-
----
-
-## ⚙️ Environment Variables Setup
-
-### Backend (Render Environment)
-
-- PORT: 8081
-- DATABASE_URL: Your full Neon PostgreSQL connection string with SSL required configuration
-- JWT_SECRET: Your secure private cryptographic signing token
+├── client/                 # Next.js Frontend Application
+│   ├── public/             # Static production assets
+│   └── src/
+│       ├── app/            # App Router pages and layouts
+│       ├── components/     # UI elements and layout modules
+│       └── context/        # React AuthContext global state managers
+├── server/                 # Go (Golang) Backend API
+│   ├── cmd/
+│   │   └── api/
+│   │       └── main.go     # Core server entry point & CORS definitions
+│   ├── internal/
+│   │   ├── config/         # Infrastructure validation models
+│   │   ├── database/       # GORM connection pools
+│   │   ├── handler/        # HTTP request parsers & structural response contexts
+│   │   ├── middleware/     # Custom global error interceptors & JWT validators
+│   │   ├── router/         # Modular route groups (User, Expense)
+│   │   └── service/        # Pure isolated business and mutation logic
+│   └── pkg/
+│       ├── logger/         # Structured console monitors
+│       ├── response/       # Universal JSON marshalling shapes
+│       └── validator/      # Payload verification structs
+└── README.md               # Unified workspace blueprint
+```
