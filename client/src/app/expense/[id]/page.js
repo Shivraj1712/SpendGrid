@@ -150,23 +150,23 @@ export default function ExpensePage() {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] flex flex-col">
-      <header className="bg-white border-b border-slate-200 py-4 px-6 md:px-12 flex items-center justify-between">
+      <header className="bg-white border-b border-slate-200 py-4 px-4 sm:px-6 md:px-12 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-2">
           <div className="bg-slate-900 text-white p-1 rounded-lg">
             <Wallet className="h-4 w-4" />
           </div>
-          <span className="font-bold text-slate-950 tracking-tight">LedgerMinimal</span>
+          <span className="font-bold text-slate-950 tracking-tight text-sm sm:text-base">LedgerMinimal</span>
         </div>
         <button
           onClick={() => router.push("/")}
-          className="text-xs font-semibold text-slate-600 hover:text-slate-900 border border-slate-200 hover:bg-slate-50 px-3 py-1.5 rounded-lg transition flex items-center gap-1.5"
+          className="text-xs font-semibold text-slate-600 hover:text-slate-900 border border-slate-200 hover:bg-slate-50 px-2.5 py-1.5 rounded-lg transition flex items-center gap-1.5"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           <span>Dashboard</span>
         </button>
       </header>
 
-      <main className="flex-1 p-6 md:p-12 max-w-2xl mx-auto w-full flex flex-col justify-center">
+      <main className="flex-1 p-4 sm:p-6 md:p-12 max-w-2xl mx-auto w-full flex flex-col justify-center">
         {error && (
           <div className="mb-4 bg-red-50 text-red-600 text-xs px-3 py-2.5 rounded-lg border border-red-100 font-medium">
             {error}
@@ -174,14 +174,14 @@ export default function ExpensePage() {
         )}
 
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+          <div className="bg-slate-50 px-4 py-4 sm:px-6 border-b border-slate-200 flex items-center justify-between">
             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Expense Record</span>
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-200 text-slate-800 uppercase tracking-wide">
               {expense.category}
             </span>
           </div>
 
-          <div className="p-6 md:p-8">
+          <div className="p-4 sm:p-6 md:p-8">
             {editMode ? (
               <form onSubmit={handleUpdate} className="space-y-4">
                 <div className="space-y-1">
@@ -222,7 +222,7 @@ export default function ExpensePage() {
                   </select>
                 </div>
 
-                <div className="flex gap-3 pt-4 border-t border-slate-100">
+                <div className="flex flex-col-reverse sm:flex-row gap-3 pt-4 border-t border-slate-100">
                   <button
                     type="button"
                     disabled={actionLoading}
@@ -232,7 +232,7 @@ export default function ExpensePage() {
                       setEditCategory(expense.category);
                       setEditMode(false);
                     }}
-                    className="flex-1 border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold py-2 rounded-lg transition text-sm flex items-center justify-center gap-1.5"
+                    className="w-full sm:flex-1 border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold py-2.5 rounded-lg transition text-sm flex items-center justify-center gap-1.5"
                   >
                     <X className="h-4 w-4" />
                     <span>Cancel</span>
@@ -240,7 +240,7 @@ export default function ExpensePage() {
                   <button
                     type="submit"
                     disabled={actionLoading}
-                    className="flex-1 bg-slate-900 hover:bg-slate-800 text-white font-semibold py-2 rounded-lg transition text-sm flex items-center justify-center gap-1.5"
+                    className="w-full sm:flex-1 bg-slate-900 hover:bg-slate-800 text-white font-semibold py-2.5 rounded-lg transition text-sm flex items-center justify-center gap-1.5"
                   >
                     {actionLoading ? (
                       <Loader2 className="h-4 w-4 animate-spin text-white" />
@@ -256,26 +256,28 @@ export default function ExpensePage() {
             ) : (
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-2xl font-bold text-slate-900 leading-snug">{expense.title}</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold text-slate-900 leading-snug break-words">{expense.title}</h2>
                   <p className="text-xs text-slate-400 mt-1">ID: {expense.expense_id}</p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-6 py-6 border-y border-slate-100">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 py-6 border-y border-slate-100">
                   <div className="space-y-1">
                     <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider block">Amount</span>
-                    <span className="text-3xl font-extrabold text-slate-900 font-mono">
+                    <span className="text-2xl sm:text-3xl font-extrabold text-slate-900 font-mono">
                       ${expense.amount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                   </div>
                   <div className="space-y-1">
                     <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider block">Created On</span>
-                    <span className="text-sm font-semibold text-slate-800 flex items-center gap-1.5 mt-1.5">
-                      <Calendar className="h-4 w-4 text-slate-400" />
-                      {new Date(expense.created_at).toLocaleDateString("en-US", {
-                        month: "long",
-                        day: "numeric",
-                        year: "numeric",
-                      })}
+                    <span className="text-sm font-semibold text-slate-800 flex items-center gap-1.5 mt-1">
+                      <Calendar className="h-4 w-4 text-slate-400 shrink-0" />
+                      <span className="truncate">
+                        {new Date(expense.created_at).toLocaleDateString("en-US", {
+                          month: "long",
+                          day: "numeric",
+                          year: "numeric",
+                        })}
+                      </span>
                     </span>
                   </div>
                 </div>

@@ -21,6 +21,7 @@ import {
   Loader2,
   Trash2,
   Edit,
+  Menu,
 } from "lucide-react";
 
 export default function Home() {
@@ -48,6 +49,7 @@ export default function Home() {
   const [addCategory, setAddCategory] = useState("essentials");
   const [addError, setAddError] = useState("");
   const [addLoading, setAddLoading] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleSearch = async (e) => {
     if (e) e.preventDefault();
@@ -101,20 +103,20 @@ export default function Home() {
   if (!user) {
     return (
       <div className="min-h-screen flex flex-col bg-white">
-        <header className="border-b border-slate-100 py-4 px-6 md:px-12 flex items-center justify-between">
-          <div className="flex items-center gap-2">
+        <header className="border-b border-slate-100 py-4 px-4 sm:px-6 md:px-12 flex items-center justify-between">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             <div className="bg-slate-900 text-white p-1.5 rounded-lg">
-              <Wallet className="h-5 w-5" />
+              <Wallet className="h-4.5 w-4.5 sm:h-5 sm:w-5" />
             </div>
-            <span className="font-bold text-lg text-slate-900 tracking-tight">LedgerMinimal</span>
+            <span className="font-bold text-base sm:text-lg text-slate-900 tracking-tight">LedgerMinimal</span>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-3">
             <button
               onClick={() => {
                 setAuthModalType("login");
                 setAuthModalOpen(true);
               }}
-              className="text-sm font-medium text-slate-600 hover:text-slate-900 px-3 py-1.5 transition"
+              className="text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 px-2.5 py-1.5 transition"
             >
               Sign In
             </button>
@@ -123,35 +125,35 @@ export default function Home() {
                 setAuthModalType("signup");
                 setAuthModalOpen(true);
               }}
-              className="text-sm font-medium bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-lg transition"
+              className="text-xs sm:text-sm font-medium bg-slate-900 hover:bg-slate-800 text-white px-3 py-2 rounded-lg transition"
             >
               Get Started
             </button>
           </div>
         </header>
 
-        <main className="flex-1 flex flex-col justify-center items-center px-6 md:px-12 py-16 max-w-6xl mx-auto w-full">
+        <main className="flex-1 flex flex-col justify-center items-center px-4 sm:px-6 md:px-12 py-12 md:py-16 max-w-6xl mx-auto w-full">
           <div className="text-center max-w-3xl space-y-6">
             <div className="inline-flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-3 py-1 rounded-full text-xs font-semibold text-slate-800">
               <TrendingUp className="h-3.5 w-3.5" />
               <span>Simplified Expenditure Management</span>
             </div>
-            <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight">
               Financial ledger <br className="hidden md:inline" />
               <span className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-700 bg-clip-text text-transparent">
                 made simple.
               </span>
             </h1>
-            <p className="text-lg text-slate-500 max-w-xl mx-auto">
+            <p className="text-sm sm:text-base md:text-lg text-slate-500 max-w-xl mx-auto">
               Manage, audit, and trace every organizational expense in real-time. Beautifully structured, minimal dashboard built for absolute clarity.
             </p>
-            <div className="flex justify-center pt-4">
+            <div className="flex justify-center pt-2">
               <button
                 onClick={() => {
                   setAuthModalType("signup");
                   setAuthModalOpen(true);
                 }}
-                className="inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-medium px-8 py-3.5 rounded-xl shadow-lg shadow-slate-900/10 hover:shadow-xl hover:shadow-slate-900/20 transition-all transform hover:-translate-y-0.5 text-base"
+                className="inline-flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white font-medium px-6 py-3 sm:px-8 sm:py-3.5 rounded-xl shadow-lg shadow-slate-900/10 hover:shadow-xl hover:shadow-slate-900/20 transition-all transform hover:-translate-y-0.5 text-sm sm:text-base"
               >
                 Start tracking free
                 <ArrowRight className="h-4 w-4" />
@@ -159,7 +161,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-24 w-full border-t border-slate-100 pt-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mt-16 md:mt-24 w-full border-t border-slate-100 pt-12 md:pt-16">
             <div className="space-y-3">
               <div className="bg-slate-50 w-10 h-10 rounded-xl flex items-center justify-center border border-slate-100 text-slate-900">
                 <LayoutDashboard className="h-5 w-5" />
@@ -206,8 +208,21 @@ export default function Home() {
   const totalAmount = expenses.reduce((sum, item) => sum + item.amount, 0);
 
   return (
-    <div className="min-h-screen flex bg-[#f8fafc]">
-      <aside className="w-64 border-r border-slate-200 bg-white flex flex-col shrink-0">
+    <div className="min-h-screen flex bg-[#f8fafc] overflow-hidden">
+      {/* Mobile sidebar overlay backdrop */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-slate-950/40 backdrop-blur-xs z-40 md:hidden transition-opacity duration-300"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside
+        className={`fixed inset-y-0 left-0 w-64 border-r border-slate-200 bg-white flex flex-col shrink-0 z-50 transform transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:flex ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
         <div className="p-6 border-b border-slate-100 flex items-center gap-2">
           <div className="bg-slate-900 text-white p-1 rounded-lg">
             <Wallet className="h-4 w-4" />
@@ -217,7 +232,10 @@ export default function Home() {
 
         <nav className="flex-1 p-4 space-y-1">
           <button
-            onClick={() => setActiveTab("expenses")}
+            onClick={() => {
+              setActiveTab("expenses");
+              setSidebarOpen(false);
+            }}
             className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition ${
               activeTab === "expenses"
                 ? "bg-slate-900 text-white"
@@ -228,7 +246,10 @@ export default function Home() {
             <span>Expenses</span>
           </button>
           <button
-            onClick={() => setActiveTab("profile")}
+            onClick={() => {
+              setActiveTab("profile");
+              setSidebarOpen(false);
+            }}
             className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition ${
               activeTab === "profile"
                 ? "bg-slate-900 text-white"
@@ -242,7 +263,10 @@ export default function Home() {
 
         <div className="p-4 border-t border-slate-100">
           <button
-            onClick={logout}
+            onClick={() => {
+              logout();
+              setSidebarOpen(false);
+            }}
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold text-red-600 hover:bg-red-50 transition"
           >
             <LogOut className="h-4 w-4" />
@@ -251,12 +275,36 @@ export default function Home() {
         </div>
       </aside>
 
-      <main className="flex-1 flex flex-col min-w-0 bg-[#f8fafc]">
+      <main className="flex-1 flex flex-col min-w-0 bg-[#f8fafc] overflow-y-auto">
+        {/* Mobile Header */}
+        <header className="flex md:hidden items-center justify-between px-4 py-4 bg-white border-b border-slate-200 shrink-0">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="p-1.5 -ml-1 rounded-lg text-slate-600 hover:bg-slate-50 transition"
+              aria-label="Open menu"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+            <div className="flex items-center gap-2">
+              <div className="bg-slate-900 text-white p-1 rounded-lg">
+                <Wallet className="h-4 w-4" />
+              </div>
+              <span className="font-bold text-slate-950 tracking-tight text-sm">SpendGrid</span>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <span className="text-xs bg-slate-100 text-slate-800 px-3 py-1 rounded-full font-semibold capitalize tracking-wide">
+              {activeTab}
+            </span>
+          </div>
+        </header>
+
         {activeTab === "expenses" ? (
-          <div className="p-8 md:p-12 space-y-8 flex-1 overflow-auto">
+          <div className="p-4 sm:p-8 md:p-12 space-y-6 sm:space-y-8 flex-1 overflow-y-auto">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <h1 className="text-3xl font-bold tracking-tight text-slate-900">Financial Ledger</h1>
+                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">Financial Ledger</h1>
                 <p className="text-slate-500 text-sm mt-1">Manage and audit your organizational expenditure.</p>
               </div>
               <button
@@ -269,21 +317,21 @@ export default function Home() {
             </div>
 
             <form onSubmit={handleSearch} className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row gap-3">
-              <div className="relative flex-1">
+              <div className="relative flex-1 w-full">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <input
                   type="text"
                   placeholder="Search records..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-3 py-2 border border-slate-200 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-950 focus:border-slate-950 text-sm"
+                  className="w-full pl-9 pr-3 py-2.5 border border-slate-200 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-950 focus:border-slate-950 text-sm"
                 />
               </div>
 
               <select
                 value={categoryFilter}
                 onChange={(e) => handleCategoryChange(e.target.value)}
-                className="px-3 py-2 border border-slate-200 rounded-lg text-slate-700 bg-white focus:outline-none focus:ring-1 focus:ring-slate-950 focus:border-slate-950 text-sm"
+                className="w-full sm:w-auto px-3 py-2.5 border border-slate-200 rounded-lg text-slate-700 bg-white focus:outline-none focus:ring-1 focus:ring-slate-950 focus:border-slate-950 text-sm"
               >
                 <option value="All Categories">All Categories</option>
                 <option value="essentials">Essentials</option>
@@ -293,10 +341,10 @@ export default function Home() {
                 <option value="others">Others</option>
               </select>
 
-              <div className="flex gap-2">
+              <div className="flex gap-2 w-full sm:w-auto">
                 <button
                   type="submit"
-                  className="bg-slate-950 hover:bg-slate-900 text-white text-sm font-semibold px-5 py-2 rounded-lg transition"
+                  className="flex-1 sm:flex-none bg-slate-950 hover:bg-slate-900 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition"
                 >
                   Search
                 </button>
@@ -304,7 +352,7 @@ export default function Home() {
                   <button
                     type="button"
                     onClick={handleResetSearch}
-                    className="border border-slate-200 hover:bg-slate-50 text-slate-600 text-sm font-semibold px-3 py-2 rounded-lg transition"
+                    className="flex-1 sm:flex-none border border-slate-200 hover:bg-slate-50 text-slate-600 text-sm font-semibold px-3 py-2.5 rounded-lg transition"
                   >
                     Reset
                   </button>
@@ -315,13 +363,13 @@ export default function Home() {
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse text-left text-sm text-slate-600">
-                  <thead className="bg-slate-50 text-slate-400 text-xs font-semibold uppercase tracking-wider border-b border-slate-200">
+                  <thead className="bg-slate-50 text-slate-400 text-[10px] sm:text-xs font-semibold uppercase tracking-wider border-b border-slate-200">
                     <tr>
-                      <th className="px-6 py-4">Title</th>
-                      <th className="px-6 py-4">Amount</th>
-                      <th className="px-6 py-4">Category</th>
-                      <th className="px-6 py-4">Date</th>
-                      <th className="px-6 py-4 text-right">Action</th>
+                      <th className="px-4 py-4 md:px-6">Title</th>
+                      <th className="px-4 py-4 md:px-6">Amount</th>
+                      <th className="hidden sm:table-cell px-4 py-4 md:px-6">Category</th>
+                      <th className="hidden md:table-cell px-4 py-4 md:px-6">Date</th>
+                      <th className="px-4 py-4 md:px-6 text-right">Action</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
@@ -331,27 +379,27 @@ export default function Home() {
                           key={item.expense_id}
                           className="hover:bg-slate-50 transition cursor-pointer"
                         >
-                          <td className="px-6 py-4 font-semibold text-slate-900">
-                            <Link href={`/expense/${item.expense_id}`} className="hover:underline block">
+                          <td className="px-4 py-4 md:px-6 font-semibold text-slate-900">
+                            <Link href={`/expense/${item.expense_id}`} className="hover:underline block truncate max-w-[120px] sm:max-w-xs md:max-w-md">
                               {item.title}
                             </Link>
                           </td>
-                          <td className="px-6 py-4 font-mono font-bold text-slate-900">
+                          <td className="px-4 py-4 md:px-6 font-mono font-bold text-slate-900 whitespace-nowrap">
                             ${item.amount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                           </td>
-                          <td className="px-6 py-4">
+                          <td className="hidden sm:table-cell px-4 py-4 md:px-6">
                             <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800 uppercase tracking-wide">
                               {item.category}
                             </span>
                           </td>
-                          <td className="px-6 py-4 text-slate-500">
+                          <td className="hidden md:table-cell px-4 py-4 md:px-6 text-slate-500 whitespace-nowrap">
                             {new Date(item.created_at).toLocaleDateString("en-US", {
                               month: "short",
                               day: "numeric",
                               year: "numeric",
                             })}
                           </td>
-                          <td className="px-6 py-4 text-right">
+                          <td className="px-4 py-4 md:px-6 text-right whitespace-nowrap">
                             <Link
                               href={`/expense/${item.expense_id}`}
                               className="inline-flex items-center justify-center p-1.5 rounded-lg border border-slate-200 text-slate-500 hover:text-slate-950 hover:bg-slate-50 transition"
@@ -374,8 +422,8 @@ export default function Home() {
             </div>
           </div>
         ) : (
-          <div className="p-8 md:p-12 max-w-md mx-auto w-full space-y-8 flex-1 flex flex-col justify-center">
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 text-center space-y-6">
+          <div className="p-4 sm:p-8 md:p-12 max-w-md mx-auto w-full space-y-6 sm:space-y-8 flex-1 flex flex-col justify-center">
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8 text-center space-y-6">
               <div className="mx-auto w-16 h-16 rounded-2xl bg-slate-900 text-white flex items-center justify-center text-3xl font-bold shadow-md">
                 {user.user_name ? user.user_name.charAt(0).toUpperCase() : "U"}
               </div>
@@ -385,20 +433,22 @@ export default function Home() {
               </div>
 
               <div className="border-t border-slate-100 pt-4 text-left space-y-3">
-                <div className="flex justify-between items-center text-sm">
+                <div className="flex justify-between items-center text-sm gap-2">
                   <span className="text-slate-400 uppercase tracking-wider font-semibold text-[10px]">Email</span>
-                  <span className="text-slate-900 font-semibold">{user.email}</span>
+                  <span className="text-slate-900 font-semibold truncate max-w-[180px] sm:max-w-none" title={user.email}>
+                    {user.email}
+                  </span>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 border-t border-slate-100 pt-6">
-                <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 text-center">
-                  <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider block">Total Expenses</span>
-                  <span className="text-2xl font-bold text-slate-900 mt-1 block">{expenses.length}</span>
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 border-t border-slate-100 pt-6">
+                <div className="bg-slate-50 p-3 sm:p-4 rounded-xl border border-slate-100 text-center">
+                  <span className="text-[9px] sm:text-[10px] text-slate-400 font-semibold uppercase tracking-wider block">Total Expenses</span>
+                  <span className="text-xl sm:text-2xl font-bold text-slate-900 mt-1 block">{expenses.length}</span>
                 </div>
-                <div className="bg-slate-50 p-4 rounded-xl border border-slate-100 text-center">
-                  <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider block">Total Amount</span>
-                  <span className="text-2xl font-bold text-slate-900 mt-1 block">
+                <div className="bg-slate-50 p-3 sm:p-4 rounded-xl border border-slate-100 text-center">
+                  <span className="text-[9px] sm:text-[10px] text-slate-400 font-semibold uppercase tracking-wider block">Total Amount</span>
+                  <span className="text-xl sm:text-2xl font-bold text-slate-900 mt-1 block truncate" title={`$${totalAmount.toFixed(2)}`}>
                     ${totalAmount.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>
                 </div>
