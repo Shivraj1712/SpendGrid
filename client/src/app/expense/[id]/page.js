@@ -6,6 +6,13 @@ import { useAuth } from "@/context/AuthContext";
 import api from "@/lib/axios";
 import { Button } from "@/components/ui/button";
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import {
   ArrowLeft,
   Calendar,
   Layers,
@@ -33,6 +40,7 @@ export default function ExpensePage() {
   const [editAmount, setEditAmount] = useState("");
   const [editCategory, setEditCategory] = useState("");
   const [actionLoading, setActionLoading] = useState(false);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -92,10 +100,7 @@ export default function ExpensePage() {
   };
 
   const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this expense?")) {
-      return;
-    }
-
+    setDeleteConfirmOpen(false);
     setActionLoading(true);
     setError("");
 
@@ -285,7 +290,7 @@ export default function ExpensePage() {
                     <span>Update Details</span>
                   </button>
                   <button
-                    onClick={handleDelete}
+                    onClick={() => setDeleteConfirmOpen(true)}
                     disabled={actionLoading}
                     className="flex-1 border border-red-200 hover:bg-red-50 text-red-600 font-semibold py-2.5 rounded-lg transition text-sm flex items-center justify-center gap-1.5"
                   >
@@ -304,6 +309,31 @@ export default function ExpensePage() {
           </div>
         </div>
       </main>
+
+      <Dialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+        <DialogContent className="sm:max-w-md bg-white p-6 rounded-2xl shadow-xl border border-slate-100">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-slate-900">Delete Expense?</DialogTitle>
+            <DialogDescription className="text-slate-500">
+              Are you sure you want to delete this expense? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex gap-3 justify-end mt-4">
+            <button
+              onClick={() => setDeleteConfirmOpen(false)}
+              className="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold rounded-xl transition text-sm"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleDelete}
+              className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl transition text-sm shadow-sm"
+            >
+              Delete
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -375,7 +375,7 @@ export default function Home() {
               </div>
 
               <div>
-                <h2 className="text-xl font-bold text-slate-900">User Profile</h2>
+                <h2 className="text-xl font-bold text-slate-900">{user.user_name}</h2>
                 <p className="text-slate-500 text-sm">Account Configuration</p>
               </div>
 
