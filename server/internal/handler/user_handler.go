@@ -38,9 +38,10 @@ func (r *AuthHandler) SignUp(ctx *fiber.Ctx) error {
 		Name:     "jwt",
 		Value:    token,
 		HTTPOnly: true,
-		Secure:   false,
+		Secure:   true,
 		Expires:  time.Now().Add(time.Hour * 72),
 		Path:     "/",
+		SameSite: fiber.CookieSameSiteNoneMode,
 	}
 	ctx.Cookie(&cookie)
 	return response.Response(ctx, "User Sign Up Successful", nil, true, fiber.StatusCreated)
@@ -65,8 +66,10 @@ func (r *AuthHandler) Login(ctx *fiber.Ctx) error {
 		Name:     "jwt",
 		Value:    token,
 		HTTPOnly: true,
-		Secure:   false,
+		Secure:   true,
 		Path:     "/",
+		Expires:  time.Now().Add(time.Hour * 72),
+		SameSite: fiber.CookieSameSiteNoneMode,
 	}
 	ctx.Cookie(cookie)
 	return response.Response(ctx, "User Login Successful", nil, true, fiber.StatusOK)
@@ -74,10 +77,12 @@ func (r *AuthHandler) Login(ctx *fiber.Ctx) error {
 
 func (r *AuthHandler) Logout(ctx *fiber.Ctx) error {
 	ctx.Cookie(&fiber.Cookie{
-		Name:    "jwt",
-		Value:   "",
-		Expires: time.Now().Add(-time.Hour),
-		Path:    "/",
+		Name:     "jwt",
+		Value:    "",
+		Expires:  time.Now().Add(-time.Hour),
+		Path:     "/",
+		Secure:   true,
+		SameSite: fiber.CookieSameSiteNoneMode,
 	})
 	return response.Response(ctx, "User Logout Successful", nil, true, fiber.StatusOK)
 }
