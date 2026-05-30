@@ -50,9 +50,16 @@ export default function Home() {
   const [addLoading, setAddLoading] = useState(false);
 
   const handleSearch = async (e) => {
-    e.preventDefault();
-    const cat = categoryFilter === "All Categories" ? "" : categoryFilter;
-    await searchExpenses(searchQuery, cat);
+    if (e) e.preventDefault();
+    setCategoryFilter("All Categories");
+    await searchExpenses(searchQuery, "");
+  };
+
+  const handleCategoryChange = async (value) => {
+    setCategoryFilter(value);
+    setSearchQuery("");
+    const cat = value === "All Categories" ? "" : value;
+    await searchExpenses("", cat);
   };
 
   const handleResetSearch = async () => {
@@ -206,7 +213,7 @@ export default function Home() {
           <div className="bg-slate-900 text-white p-1 rounded-lg">
             <Wallet className="h-4 w-4" />
           </div>
-          <span className="font-bold text-slate-950 tracking-tight">LedgerMinimal</span>
+          <span className="font-bold text-slate-950 tracking-tight">SpendGrid</span>
         </div>
 
         <nav className="flex-1 p-4 space-y-1">
@@ -276,7 +283,7 @@ export default function Home() {
 
               <select
                 value={categoryFilter}
-                onChange={(e) => setCategoryFilter(e.target.value)}
+                onChange={(e) => handleCategoryChange(e.target.value)}
                 className="px-3 py-2 border border-slate-200 rounded-lg text-slate-700 bg-white focus:outline-none focus:ring-1 focus:ring-slate-950 focus:border-slate-950 text-sm"
               >
                 <option value="All Categories">All Categories</option>
@@ -376,7 +383,6 @@ export default function Home() {
 
               <div>
                 <h2 className="text-xl font-bold text-slate-900">{user.user_name}</h2>
-                <p className="text-slate-500 text-sm">Account Configuration</p>
               </div>
 
               <div className="border-t border-slate-100 pt-4 text-left space-y-3">
