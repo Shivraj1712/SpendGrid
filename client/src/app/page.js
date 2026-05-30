@@ -51,15 +51,14 @@ export default function Home() {
 
   const handleSearch = async (e) => {
     if (e) e.preventDefault();
-    setCategoryFilter("All Categories");
-    await searchExpenses(searchQuery, "");
+    const cat = categoryFilter === "All Categories" ? "" : categoryFilter;
+    await searchExpenses(searchQuery, cat);
   };
 
   const handleCategoryChange = async (value) => {
     setCategoryFilter(value);
-    setSearchQuery("");
     const cat = value === "All Categories" ? "" : value;
-    await searchExpenses("", cat);
+    await searchExpenses(searchQuery, cat);
   };
 
   const handleResetSearch = async () => {
