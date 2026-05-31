@@ -2,6 +2,8 @@
 
 import { createContext, useContext, useState, useEffect } from "react";
 import api from "@/lib/axios";
+import { toast } from "sonner";
+import { handleApiError } from "@/lib/utils";
 
 const AuthContext = createContext();
 
@@ -26,6 +28,12 @@ export function AuthProvider({ children }) {
     } catch (err) {
       setUser(null);
       setExpenses([]);
+      // Only toast on initial fetch failures if it is a real error like network or 500 server error
+      if (err.response && err.response.status !== 401) {
+        toast.error(handleApiError(err, "Failed to load profile"));
+      } else if (!err.response) {
+        toast.error(handleApiError(err, "Failed to connect to server"));
+      }
     } finally {
       setLoading(false);
     }
@@ -48,13 +56,18 @@ export function AuthProvider({ children }) {
             setExpenses(expensesRes.data.data || []);
           }
         }
+        toast.success("Successfully logged in!");
         return { success: true };
       }
-      return { success: false, message: res.data.message || "Login failed" };
+      const errorMsg = res.data.message || "Login failed";
+      toast.error(errorMsg);
+      return { success: false, message: errorMsg };
     } catch (err) {
+      const errorMsg = handleApiError(err, "Invalid credentials");
+      toast.error(errorMsg);
       return {
         success: false,
-        message: err.response?.data?.message || "Invalid credentials",
+        message: errorMsg,
       };
     } finally {
       setLoading(false);
@@ -78,13 +91,18 @@ export function AuthProvider({ children }) {
             setExpenses(expensesRes.data.data || []);
           }
         }
+        toast.success("Successfully signed up!");
         return { success: true };
       }
-      return { success: false, message: res.data.message || "Signup failed" };
+      const errorMsg = res.data.message || "Signup failed";
+      toast.error(errorMsg);
+      return { success: false, message: errorMsg };
     } catch (err) {
+      const errorMsg = handleApiError(err, "Signup failed");
+      toast.error(errorMsg);
       return {
         success: false,
-        message: err.response?.data?.message || "Signup failed",
+        message: errorMsg,
       };
     } finally {
       setLoading(false);
@@ -95,7 +113,9 @@ export function AuthProvider({ children }) {
     setLoading(true);
     try {
       await api.post("/auth/logout");
+      toast.success("Logged out successfully.");
     } catch (err) {
+      toast.error(handleApiError(err, "Logout failed"));
     } finally {
       setUser(null);
       setExpenses([]);
@@ -118,13 +138,18 @@ export function AuthProvider({ children }) {
       const res = await api.post("/expense", { title, amount: parseFloat(amount), category });
       if (res.data && res.data.success) {
         await refreshExpenses();
+        toast.success("Expense added successfully!");
         return { success: true };
       }
-      return { success: false, message: res.data.message || "Failed to add expense" };
+      const errorMsg = res.data.message || "Failed to add expense";
+      toast.error(errorMsg);
+      return { success: false, message: errorMsg };
     } catch (err) {
+      const errorMsg = handleApiError(err, "Failed to add expense");
+      toast.error(errorMsg);
       return {
         success: false,
-        message: err.response?.data?.message || "Failed to add expense",
+        message: errorMsg,
       };
     }
   };
@@ -134,13 +159,18 @@ export function AuthProvider({ children }) {
       const res = await api.put(`/expense/${id}`, { title, amount: parseFloat(amount), category });
       if (res.data && res.data.success) {
         await refreshExpenses();
+        toast.success("Expense updated successfully!");
         return { success: true };
       }
-      return { success: false, message: res.data.message || "Failed to update expense" };
+      const errorMsg = res.data.message || "Failed to update expense";
+      toast.error(errorMsg);
+      return { success: false, message: errorMsg };
     } catch (err) {
+      const errorMsg = handleApiError(err, "Failed to update expense");
+      toast.error(errorMsg);
       return {
         success: false,
-        message: err.response?.data?.message || "Failed to update expense",
+        message: errorMsg,
       };
     }
   };
@@ -150,13 +180,18 @@ export function AuthProvider({ children }) {
       const res = await api.delete(`/expense/${id}`);
       if (res.data && res.data.success) {
         await refreshExpenses();
+        toast.success("Expense deleted successfully!");
         return { success: true };
       }
-      return { success: false, message: res.data.message || "Failed to delete expense" };
+      const errorMsg = res.data.message || "Failed to delete expense";
+      toast.error(errorMsg);
+      return { success: false, message: errorMsg };
     } catch (err) {
+      const errorMsg = handleApiError(err, "Failed to delete expense");
+      toast.error(errorMsg);
       return {
         success: false,
-        message: err.response?.data?.message || "Failed to delete expense",
+        message: errorMsg,
       };
     }
   };
@@ -168,8 +203,10 @@ export function AuthProvider({ children }) {
         setExpenses(res.data.data || []);
         return { success: true };
       }
+      toast.error("Failed to search expenses");
       return { success: false };
     } catch (err) {
+      toast.error(handleApiError(err, "Failed to search expenses"));
       return { success: false };
     }
   };

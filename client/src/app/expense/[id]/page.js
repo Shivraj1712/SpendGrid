@@ -5,6 +5,8 @@ import { useRouter, useParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import api from "@/lib/axios";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { handleApiError } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
@@ -59,10 +61,14 @@ export default function ExpensePage() {
         setEditAmount(data.amount.toString());
         setEditCategory(data.category);
       } else {
-        setError("Expense not found");
+        const msg = res.data?.message || "Expense not found";
+        setError(msg);
+        toast.error(msg);
       }
     } catch (err) {
-      setError("Failed to fetch expense details");
+      const errorMsg = handleApiError(err, "Failed to fetch expense details");
+      setError(errorMsg);
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }
