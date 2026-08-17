@@ -108,7 +108,7 @@ export default function Home() {
             <div className="bg-slate-900 text-white p-1.5 rounded-lg">
               <Wallet className="h-4.5 w-4.5 sm:h-5 sm:w-5" />
             </div>
-            <span className="font-bold text-base sm:text-lg text-slate-900 tracking-tight">LedgerMinimal</span>
+            <span className="font-bold text-base sm:text-lg text-slate-900 tracking-tight">SpendGrid</span>
           </div>
           <div className="flex items-center gap-1.5 sm:gap-3">
             <button
