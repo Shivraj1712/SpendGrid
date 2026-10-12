@@ -1,17 +1,26 @@
+// Package response provides HTTP response helpers.
 package response
 
-import "github.com/gofiber/fiber/v2"
+import "github.com/labstack/echo/v5"
 
 type APIResponse struct {
 	Message string `json:"message"`
-	Success bool   `json:"success"`
+	Status  bool   `json:"status"`
 	Data    any    `json:"data"`
 }
 
-func Response(ctx *fiber.Ctx, message string, data any, success bool, statusCode int) error {
-	var response APIResponse
-	response.Data = data
-	response.Message = message
-	response.Success = success
-	return ctx.Status(statusCode).JSON(response)
+func Success(c *echo.Context, code int, message string, data any) error {
+	return c.JSON(code, &APIResponse{
+		Message: message,
+		Status:  true,
+		Data:    data,
+	})
+}
+
+func Error(c *echo.Context, code int, message string) error {
+	return c.JSON(code, &APIResponse{
+		Message: message,
+		Status:  false,
+		Data:    nil,
+	})
 }
